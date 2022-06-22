@@ -2,6 +2,7 @@
   <van-list
     v-model="loading"
     :finished="finished"
+    :immediate-check="false"
     finished-text="没有更多了"
     @load="onLoad"
     :error='error'
@@ -12,7 +13,7 @@
   :key="index" 
   :comment="item"
   @replyClick="$emit('replyClick',$event)"
-  ></CommentItem>
+  />
   
 </van-list>
 </template>
@@ -30,6 +31,14 @@ props:{
   list:{
     type:Array,
     default:()=>[]
+  },
+  type:{
+    type:String,
+    // 自定义校验
+     Validator(value){
+      return ['a','c'].includes(value)
+    },
+    default:'a',
   }
 },
 data() {
@@ -43,6 +52,7 @@ data() {
     };
   },
   created(){
+    this.loading = true
     this.onLoad()
   },
   methods: {
@@ -50,13 +60,12 @@ data() {
       try {
         // 1.请求获取数据
         const {data} = await getComments({
-          type:'a', //评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
-          source:this.source , //源id，文章id或评论id
+          type:this.type, //评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+          source:this.source.toString(), //源id，文章id或评论id
           // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
           offset:this.offset,
           limit:this.limit
         })
-          console.log(this.list);
         // 2.将数据添加到列表中
         const { results, } = data.data
         this.list.push(...results)
@@ -79,9 +88,7 @@ data() {
         this.loading = false
       }
     },
-    logbtn(item){
-      console.log(item);
-    }
+   
   },
   components:{
     CommentItem

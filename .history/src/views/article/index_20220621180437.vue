@@ -273,7 +273,6 @@ export default {
             this.commentList.unshift(data.new_obj)
       },
       onReplyClick(comment){
-        console.log(comment);
         this.currentComment = comment
         // 显示评论结果
         this.isReplyShower = true

@@ -62,7 +62,7 @@ export default {
             this.$toast('请先登录')
           } else {
             this.$toast(message)
-            console.log(err);
+
           }
           
         }

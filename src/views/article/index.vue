@@ -161,14 +161,26 @@
     </div>
 
       <!-- 评论回复 -->
+
+      <!-- 
+        弹出层是懒渲染的：
+        只有在第一次展示的时候才会渲染里面的内容,
+        之后它的关闭和显示都是在切换内容的显示和隐藏
+       -->
        <van-popup 
             v-model="isReplyShower"
             position="bottom"
             style="height:100%"
            
         >
+            <!-- 采用v-if的理由：
+              1.v-if起销毁和重新加载的作用
+              2.如果不使用v-if，看文章的每个评论都是第一次加载的评论
+             -->
             <CommentReply 
+            v-if="isReplyShower"
               :comment="currentComment"
+              @close ='isReplyShower = false'
             />
         </van-popup>
       <!-- 评论回复 -->
@@ -201,6 +213,12 @@ export default {
       articleId:{
         type:[Number,String,Object],
         requied:true
+      }
+    },
+    // 依赖注入：给所有的后代提供数据
+    provide: function () {
+      return {
+        articleId:this.articleId
       }
     },
     data(){
@@ -250,7 +268,6 @@ export default {
         // 得到所有的img节点
         const articleContent = this.$refs['article-content']
         const imgs = articleContent.querySelectorAll('img')
-        imgs.src = './1.jpg'
         // 获取所有的img地址
         const images = []
         imgs.forEach((img,index) => {

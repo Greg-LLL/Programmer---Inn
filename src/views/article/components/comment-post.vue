@@ -26,17 +26,25 @@ export default {
       target:{
           type:[Number,String,Object],
           required:true
-      }
+      },
+
   },
   data () {
     return {
-      message: ''
+      message: '',
     }
   },
   computed: {},
   watch: {},
   created () {},
   mounted () {},
+  // 接受祖先组件的依赖注入，及接受index组件的articleId
+  inject: {
+   articleId:{
+      type:[String,Object,Number],
+      default:null
+   }
+  },
   methods: {
       async onPost(){
         this.$toast.loading({
@@ -47,9 +55,9 @@ export default {
           try {
               const {data} = await addComments({
                   //评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
-                  target:this.target, 
+                  target:this.target.toString(), 
                   content:this.message,
-                  art_id:null
+                  art_id:this.articleId ? this.articleId.toString() : null
               })
 
             // 清空文本框
