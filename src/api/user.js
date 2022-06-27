@@ -83,8 +83,8 @@ export const deleteFollow = target =>{
     })
   }
 
-  /**
- * 更新用户的招聘资料
+/**
+ * 更新用户的头像资料
  */
  export const updataUserPhoto = data => {
     return request({
@@ -93,3 +93,32 @@ export const deleteFollow = target =>{
       data
     })
   }
+
+
+/**
+ * 获取用户个人信息
+ */
+export const getUserMessage = () => {
+    return request({
+        method:'GET',
+        url:'/v1_0/user'
+    })
+} 
+/**
+ * 获取用户收藏信息
+ */
+ export const getUserCollections = () => {
+    return request({
+        method:'GET',
+        url:'/v1_0/article/collections'
+    })
+} 
+/**
+ * 获取用户阅读历史
+ */
+ export const getUserHistory = () => {
+    return request({
+        method:'GET',
+        url:'/v1_0/user/histories'
+    })
+} 

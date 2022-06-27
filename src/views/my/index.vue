@@ -3,7 +3,7 @@
         <!-- 已登录头部 -->
     <div v-if="user" class="header user-info">
       <div class="base-info">
-        <div class="left">
+        <div class="left" @click="gotoUserInfo">
           <van-image
             class="avatar"
             :src="userInfo.photo"
@@ -45,15 +45,23 @@
 
     <!-- grid导航 -->
     <van-grid class="grid-nav" :column-num="2" clickable>
-      <van-grid-item class="grid-item">
+      <van-grid-item class="grid-item" @click="shoucangshow = true">
         <i slot="icon" class="toutiao toutiao-shoucang"></i>
         <span slot="text" class="text">收藏</span>
       </van-grid-item>
-       <van-grid-item class="grid-item">
+        
+       <van-grid-item class="grid-item" @click="shoucangshow = true">
         <i slot="icon" class="toutiao toutiao-lishi"></i>
         <span slot="text" class="text">历史</span>
        </van-grid-item>     
     </van-grid>
+
+       <van-popup v-model="shoucangshow" position="bottom" :style="{height:'100%'}">
+      <Collection 
+      v-if="shoucangshow"
+      @close='shoucangshow = false'
+      />
+      </van-popup>
 
     <!-- 消息通知，小志同学以及退出登录 -->
   
@@ -72,11 +80,13 @@
 <script>
 import{ mapState } from "vuex"
 import { getUserInfo } from '@/api/user.js'
+import Collection from './commponents/collections.vue'
 export default {
     name:'MyIndex',
     data(){
       return{
-        userInfo:{}  //用户信息
+        userInfo:{} , //用户信息
+        shoucangshow:false
       }
     },
     computed:{
@@ -106,7 +116,16 @@ export default {
         } catch (err) {
           this.$toast('获取数据失败，请稍后重试')
         }
+      },
+      gotoUserInfo(){
+        this.$router.push({
+          name:'user',
+          params:{
+            userId:this.userInfo.id
+          }
+        })
       }
+      
     },
     created(){
       // 如果用户登录了，则请求加载用户信息数据
@@ -114,6 +133,9 @@ export default {
         this.loadUserInfo()
       }
 
+    },
+    components:{
+      Collection
     }
     
 }
@@ -219,6 +241,7 @@ export default {
       margin-bottom: 9px;
       
     }
+   
   }
 
 </style>>

@@ -132,7 +132,7 @@ export default {
             // 获取文件对象
             const file = this.$refs.file.files[0]
             // 基于文件对象获取blob数据(图片的src),
-             this.img  =  window.URL.createObjectURL(file)
+            this.img  =  window.URL.createObjectURL(file)
             //  展示弹出预览图片弹出层
             this.isUpdataPhotohower = true
             // file-input 如果选了同一个文件不会触发chang事件
